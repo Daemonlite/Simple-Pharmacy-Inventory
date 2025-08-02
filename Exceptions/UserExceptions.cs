@@ -31,4 +31,18 @@ namespace pharmacy_management.Exceptions
     public class CategoryAlreadyExistsException(string name) : Exception($"Category with name '{name}' already exists.")
     {
     }
+
+    //Drugs exceptions
+
+    public class DrugNotFoundException(Guid id) : Exception($"Drug with id {id} not found.")
+    {
+    }
+
+    public class DrugAlreadyExistsException(string name) : Exception($"Drug with name '{name}' already exists.")
+    {
+    }
+
+    public class InsufficientDrugQuantityException(string name) : Exception($"Drug with name {name} has insufficient Quantity")
+    {
+    }
 }

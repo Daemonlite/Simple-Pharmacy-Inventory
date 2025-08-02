@@ -13,14 +13,14 @@ namespace pharmacy_management.Controllers
     {
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<CategoryListDto>>> GetAllCategoriesAsync()
         {
             return Ok(await categoryService.GetAllCategoriesAsync());
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<CategoryListDto>>> GetCategoryByIdAsync(Guid id)
         {
             try
@@ -35,7 +35,7 @@ namespace pharmacy_management.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CategoryListDto>> CreateCategoryAsync(CategoryCreateDto category)
         {
             try
@@ -49,7 +49,7 @@ namespace pharmacy_management.Controllers
         }
 
         [HttpPut("{id}")] 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CategoryListDto>> UpdateCategoryAsync(Guid id, CategoryCreateDto categoryData)
         {
             try
@@ -63,7 +63,7 @@ namespace pharmacy_management.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<bool>> DeleteCategoryAsync(Guid id)
         {
             try
