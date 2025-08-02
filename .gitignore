@@ -1,0 +1,9 @@
+migrations/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+.vs/
+.env
