@@ -80,12 +80,15 @@ namespace pharmacy_management.Services
         public async Task<UserListDto?> RegisterAsync(UserCreateDto request)
         {
             ArgumentNullException.ThrowIfNull(request);
-        
+
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.Email == request.Email.ToLower().Trim()) ?? throw new UserAlreadyExistsException(request.Email);
+                .FirstOrDefaultAsync(u => u.Email == request.Email.ToLower().Trim());
+
+            if (user != null) throw new UserAlreadyExistsException(request.Email);
+
 
             var passwordHasher = new PasswordHasher<User>();
-            var hashedPassword = passwordHasher.HashPassword(user, request.Password);
+            var hashedPassword = passwordHasher.HashPassword(user?? new User(), request.Password);
 
             var newUser = new User
             {
@@ -122,6 +125,35 @@ namespace pharmacy_management.Services
 
             user.PasswordHash = hashedPassword;
             await context.SaveChangesAsync();
+            await  emailService.SendEmailAsync(request.Email, "OTP Verification Success", $@"
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <style>
+                            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }}
+                            .header {{ color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }}
+                            .otp-container {{ background: #f9f9f9; padding: 20px; text-align: center; margin: 20px 0; border-radius: 5px; }}
+                            .otp-code {{ font-size: 24px; font-weight: bold; letter-spacing: 3px; color: #2c3e50; }}
+                            .footer {{ margin-top: 20px; font-size: 12px; color: #7f8c8d; text-align: center; }}
+                            .warning {{ color: #e74c3c; font-weight: bold; }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class='header'>
+                            <h2>One-Time Password (OTP)</h2>
+                        </div>
+                        
+                        <p>Hello {request.Email.Split('@')[0]},</p>
+                        
+                        <p>You Have Successfullly Reset Your Password.</p>
+                        <p> If you did not initiate this password reset then contact us at <a href='mailto:info@prostash.site'>info@prostash.site</a></p>
+                    
+                        <div class='footer'>
+                            <p>© {DateTime.Now.Year} Prostash. All rights reserved.</p>
+                        </div>
+                    </body>
+                    </html>
+                ");
 
             return new UserListDto
             {
@@ -200,10 +232,10 @@ namespace pharmacy_management.Services
                         
                         <p class='warning'>This OTP is valid for 5 minutes. Please do not share this code with anyone.</p>
                         
-                        <p>If you didn't request this OTP, please ignore this email or contact support.</p>
+                        <p>If you didn't request this OTP, please ignore this email or contact support at <a href='mailto:info@prostash.site'>info@prostash.site</a>.</p>
                         
                         <div class='footer'>
-                            <p>© {DateTime.Now.Year} Your Company Name. All rights reserved.</p>
+                            <p>© {DateTime.Now.Year} Prostash. All rights reserved.</p>
                         </div>
                     </body>
                     </html>");
@@ -217,6 +249,7 @@ namespace pharmacy_management.Services
         public async Task<bool?> VerifyOtpAsync(VerifyOtpDto request)
         {
             var otp = await cache.CacheGetAsync(request.Email);
+            Console.WriteLine($"OTP: {otp}");
             if (otp == request.Otp)
             {
                 return true;

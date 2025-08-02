@@ -30,7 +30,7 @@ namespace pharmacy_management.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
 
         }
@@ -44,7 +44,7 @@ namespace pharmacy_management.Controllers
             }
             catch (UserAlreadyExistsException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
@@ -57,11 +57,11 @@ namespace pharmacy_management.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
             catch (InvalidCredentialsException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
@@ -75,7 +75,7 @@ namespace pharmacy_management.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
         }
 
@@ -89,7 +89,7 @@ namespace pharmacy_management.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
         }
 
@@ -98,11 +98,12 @@ namespace pharmacy_management.Controllers
         {
             try
             {
-                return Ok(await authservice.SendOtpAsync(request));
+                if (await authservice.SendOtpAsync(request) == false) return BadRequest(new { message = "Failed to send OTP" });
+                return Ok(new { message = "OTP sent successfully" });
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
         }
 
@@ -112,12 +113,12 @@ namespace pharmacy_management.Controllers
             try
             {
                 var result = await authservice.VerifyOtpAsync(request);
-                if (result == false) return BadRequest();
+                if (result == false) return BadRequest(new { message = "Invalid OTP or Otp Expired" });
                 return Ok(new { message = "OTP verified successfully" });
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
         }
         
@@ -130,11 +131,11 @@ namespace pharmacy_management.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
             catch (PasswordsDoNotMatchException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
