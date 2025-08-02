@@ -24,7 +24,7 @@ namespace pharmacy_management.Exceptions
 
     // product categories exceptions
 
-    public class CategoryNotFoundException(Guid id) : Exception($"Category with id '{id}' not found.")
+    public class CategoryNotFoundException() : Exception($"Category with not found.")
     {
     }
 

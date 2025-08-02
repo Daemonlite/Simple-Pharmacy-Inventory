@@ -20,6 +20,7 @@ namespace pharmacy_management.Services
                 Name = d.Name,
                 Price = d.Price,
                 Quantity = d.Quantity,
+                Description = d.Description,
                 Category = d.Category == null ? null : new CategoryDto
                 {
                     Id = d.Category.Id,
@@ -40,6 +41,7 @@ namespace pharmacy_management.Services
                 Name = d.Name,
                 Price = d.Price,
                 Quantity = d.Quantity,
+                Description = d.Description,
                 Category = d.Category == null ? null : new CategoryDto
                 {
                     Id = d.Category.Id,
@@ -65,11 +67,18 @@ namespace pharmacy_management.Services
                 throw new InsufficientDrugQuantityException(drugsDto.Name);
             }
 
+            var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == drugsDto.CategoryId);
+            if (category == null)
+            {
+                throw new CategoryNotFoundException();
+            }
+
             var newDrug = new Drug
             {
                 Name = drugsDto.Name,
                 Price = drugsDto.Price,
                 Quantity = drugsDto.Quantity,
+                Description = drugsDto.Description,
                 CategoryId = drugsDto.CategoryId,
                 Category = await context.Categories.FirstOrDefaultAsync(c => c.Id == drugsDto.CategoryId)
             };
@@ -82,6 +91,7 @@ namespace pharmacy_management.Services
                 Name = newDrug.Name,
                 Price = newDrug.Price,
                 Quantity = newDrug.Quantity,
+                Description = newDrug.Description,
                 Category = newDrug.Category == null ? null : new CategoryDto
                 {
                     Id = newDrug.Category.Id,
@@ -97,6 +107,7 @@ namespace pharmacy_management.Services
             drug.Price = drugsDto.Price;
             drug.Quantity = drugsDto.Quantity;
             drug.CategoryId = drugsDto.CategoryId;
+            drug.Description = drugsDto.Description;
             await context.SaveChangesAsync();
             return new DrugsListDto
             {
@@ -104,6 +115,7 @@ namespace pharmacy_management.Services
                 Name = drug.Name,
                 Price = drug.Price,
                 Quantity = drug.Quantity,
+                Description = drug.Description,
                 Category = drug.Category == null ? null : new CategoryDto
                 {
                     Id = drug.Category.Id,

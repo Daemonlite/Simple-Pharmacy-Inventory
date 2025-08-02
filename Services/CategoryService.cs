@@ -65,7 +65,7 @@ namespace pharmacy_management.Services
 
         public async Task<CategoryListDto> UpdateCategoryAsync(Guid id, CategoryCreateDto categoryData)
         {
-            var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == id) ?? throw new CategoryNotFoundException(id);
+            var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == id) ?? throw new CategoryNotFoundException();
 
             category.Name = categoryData.Name;
             category.Description = categoryData.Description ?? "";
@@ -91,7 +91,7 @@ namespace pharmacy_management.Services
                 await context.SaveChangesAsync();
                 return true;
             }
-            throw new CategoryNotFoundException(id);
+            throw new CategoryNotFoundException();
         }
     }
 }

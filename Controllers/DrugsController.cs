@@ -52,6 +52,10 @@ namespace pharmacy_management.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+            catch (CategoryNotFoundException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -72,13 +76,14 @@ namespace pharmacy_management.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<bool>> DeleteDrugsAsync(Guid id)
         {
             try
             {
-                return Ok(await drugsService.DeleteDrugs(id));
+                await drugsService.DeleteDrugs(id);
+                return Ok(new { message = "Drug deleted successfully" });
             }
             catch (DrugNotFoundException ex)
             {
