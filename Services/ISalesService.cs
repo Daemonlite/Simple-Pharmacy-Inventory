@@ -7,7 +7,6 @@ namespace pharmacy_management.Services
     {
         Task<List<SaleResponseDto>> GetAllSales();
         Task<SaleResponseDto> AddSales(CreateSaleDto salesDto);
-        Task<SaleResponseDto> UpdateSales(Guid id, CreateSaleDto salesDto);
         Task<SaleResponseDto?> GetSalesById(Guid id);
         Task<bool> DeleteSales(Guid id);
     }

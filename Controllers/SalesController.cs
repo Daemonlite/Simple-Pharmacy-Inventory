@@ -51,33 +51,6 @@ namespace pharmacy_management.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin,Cashier")]
-        public async Task<ActionResult<SaleResponseDto>> UpdateSalesAsync(Guid id, CreateSaleDto saleData)
-        {
-            try
-            {
-                return Ok(await salesService.UpdateSales(id, saleData));
-            }
-            catch (SaleNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (UserNotFoundException ex)
-            {
-
-                return NotFound(new { message = ex.Message });
-            }
-            catch (DrugNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InsufficientDrugQuantityException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-
-            }
-        }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin,Cashier")]
