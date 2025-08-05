@@ -47,7 +47,10 @@ namespace pharmacy_management.Controllers
             catch (InsufficientDrugQuantityException ex)
             {
                 return BadRequest(new { message = ex.Message });
-
+            }
+            catch (EmptySalesItemsException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
 
