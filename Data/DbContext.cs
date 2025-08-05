@@ -10,6 +10,9 @@ namespace pharmacy_management.Data
 
         public DbSet<Drug> Drugs { get; set; }
 
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleItem> SaleItems { get; set; }
+
         // drug price 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,6 +21,14 @@ namespace pharmacy_management.Data
             modelBuilder.Entity<Drug>()
                 .Property(d => d.Price)
                 .HasPrecision(18, 2); // 18 total digits, 2 after the decimal point
+
+            modelBuilder.Entity<Sale>()
+                .Property(s => s.TotalAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<SaleItem>()
+                .Property(si => si.PricePerUnit)
+                .HasPrecision(18, 2);
         }
     }
 }

@@ -15,14 +15,14 @@ namespace pharmacy_management.Controllers
     {
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin,Cashier,Pharmacist")]
         public async Task<ActionResult<List<DrugsListDto>>> GetAllDrugsAsync()
         {
             return Ok(await drugsService.GetAllDrugs());
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin,Cashier,Pharmacist")]
         public async Task<ActionResult<List<DrugsListDto>>> GetDrugsByIdAsync(Guid id)
         {
             try

@@ -45,4 +45,17 @@ namespace pharmacy_management.Exceptions
     public class InsufficientDrugQuantityException(string name) : Exception($"Drug with name {name} has insufficient Quantity")
     {
     }
+
+    public class EmptySalesItemsException : Exception
+    {
+        public EmptySalesItemsException()
+            : base("Sale items cannot be empty.")
+        { }
+    }
+
+    public class SaleNotFoundException(Guid id) : Exception($"Sale with id {id} not found.")
+    {
+    }
+
+
 }

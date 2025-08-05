@@ -10,7 +10,7 @@ namespace pharmacy_management.Services
 {
     public class FileUploadService(IWebHostEnvironment _env, IConfiguration configuration)
     {
-        public async Task<FinalUploadDto> UploadPatientsFileAsync(Guid patientId, IFormFile file,string uploadLocation)
+        public async Task<FinalUploadDto> UploadPatientsFileAsync(Guid patientId, IFormFile file, string uploadLocation)
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException("Invalid file");
@@ -31,11 +31,13 @@ namespace pharmacy_management.Services
 
             // Get the base URL from configuration or request
             var baseUrl = configuration["BaseUrl"] ?? "http://localhost:5104";
-            
+
             // Create absolute URL
             var absoluteUrl = $"{baseUrl}/uploads/patients/{patientId}/{fileName}";
 
             return new FinalUploadDto { AbsoluteUrl = absoluteUrl, ContentType = file.ContentType, FileSize = (int)file.Length, FileName = fileName };
         }
     }
+    
+    
 }

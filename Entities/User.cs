@@ -18,6 +18,7 @@ namespace pharmacy_management.Entities
     public enum Role
     {
         Admin,
-        Pharmacist
+        Pharmacist,
+        Cashier
     }
 }

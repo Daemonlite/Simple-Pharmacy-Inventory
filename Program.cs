@@ -46,6 +46,7 @@ builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IDrugsService, DrugsServices>();
+builder.Services.AddScoped<ISalesService, SalesService>();
 
 
 
